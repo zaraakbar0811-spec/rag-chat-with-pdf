@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chat with your PDF</title>
+  <style>
+    body { font-family: sans-serif; max-width: 700px; margin: 40px auto; }
+    #chat { border: 1px solid #ccc; padding: 15px; height: 300px; overflow-y: auto; margin-bottom: 10px; }
+    input, button { padding: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Chat with your PDF</h2>
+  <input type="file" id="pdfFile" />
+  <button onclick="uploadFile()">Upload</button>
+  <p id="uploadStatus"></p>
+
+  <div id="chat"></div>
+  <input type="text" id="question" placeholder="Ask a question..." style="width:70%" />
+  <button onclick="askQuestion()">Ask</button>
+
+  <script>
+    async function uploadFile() {
+      const file = document.getElementById('pdfFile').files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/upload', { method: 'POST', body: formData });
+      const data = await res.json();
+      document.getElementById('uploadStatus').innerText =
+        `Uploaded ${data.filename} (${data.chunks_added} chunks indexed)`;
+    }
+
+    async function askQuestion() {
+      const question = document.getElementById('question').value;
+      const formData = new FormData();
+      formData.append('question', question);
+      const res = await fetch('/chat', { method: 'POST', body: formData });
+      const data = await res.json();
+      const chat = document.getElementById('chat');
+      chat.innerHTML += `<p><b>You:</b> ${question}</p><p><b>Bot:</b> ${data.answer}</p>`;
+    }
+  </script>
+</body>
+</html>
