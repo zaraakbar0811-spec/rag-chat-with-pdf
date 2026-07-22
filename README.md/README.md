@@ -33,7 +33,7 @@ The app retrieves only the most relevant pieces of the uploaded document and fee
 
 ## Demo
 
-*(Add a screenshot or short GIF of the chat interface here)*
+![Chat with your PDF demo](screenshots/chat-demo.png)
 
 ## Getting Started
 
